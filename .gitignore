@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Local backups and diagnostics
+*.bak
+*.bak.*
+*.log
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.bin
+*diagnostic*.json
+*diagnostic*.txt
+*dump*.bin
+
+# Home Assistant private configuration
+.storage/
+**/.storage/
+secrets.yaml
+**/secrets.yaml
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.token
+*.secret
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
