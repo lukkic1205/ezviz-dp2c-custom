@@ -1,37 +1,37 @@
 # EZVIZ DP2C Custom — Home Assistant
 
-Własna gałąź rozwojowa integracji dla wizjera **EZVIZ DP2C**, bazująca na projekcie [Bobsilvio/ezviz_hp7](https://github.com/Bobsilvio/ezviz_hp7).
+Własna gałąź rozwojowa integracji dla wizjera **EZVIZ DP2C**, bazująca na [Bobsilvio/ezviz_hp7](https://github.com/Bobsilvio/ezviz_hp7) 0.18.1.
 
-> **Status: przygotowanie repozytorium.** Nie jest to jeszcze gotowa integracja do instalacji. Działający kod z lokalnego Home Assistanta nie został jeszcze przeniesiony do tego repozytorium.
+**Status: zaimportowany i zweryfikowany snapshot działającej instalacji (2026-11-01).** Repozytorium zawiera komplet **50 plików** `custom_components/ezviz_hp7/`, odtworzonych z archiwum Home Assistanta. Wszystkie pliki są identyczne z przekazanym snapshotem według Git blob SHA. Składnia plików Python i JSON została sprawdzona statycznie. **Nie przeprowadzono jeszcze niezależnego testu instalacji tego repozytorium.**
 
-## Cel
+## Co zostało zachowane
 
-Zachować działający podgląd na żywo DP2C przez MJPEG w Home Assistant i rozwijać go bez nadpisywania lokalnych poprawek przez aktualizacje HACS.
+- Działający podgląd MJPEG przez `camera_view: live` na urządzeniu EZVIZ DP2C.
+- `mjpeg.py`: `-analyzeduration 2000000`, `-probesize 2000000` oraz log `[MJPEG] FIRST FRAME`.
+- `const.py`: interwał odpytywania chmury `UPDATE_INTERVAL_SEC = 5` (testowy; może zwiększać liczbę zapytań i ryzyko limitów).
+- `live_camera.py`: lokalne zmiany obsługi SPS/PPS, GOP, diagnostyki oraz ścieżki FFmpeg.
+- `api.py`: poprawka obsługi wyjątku MFA podczas tworzenia klienta.
+- `pylocalapi/stream.py`: diagnostyczny log celu VTM TCP.
+- `manifest.json`: identyczne wymagania i metadane jak w działającym snapshotie, wersja bazowa `0.18.1`.
 
-Planowane obszary rozwoju:
-- kompatybilność z aktualnym DP2C i istniejącą domeną integracji `ezviz_hp7`;
-- konfigurowalny interwał odpytywania chmury (z kontrolą błędów i limitów API);
-- odporne na pominięcia odczytywanie alarmów dzwonka, także gdy występują alarmy PIR;
-- pomiary czasu startu transmisji MJPEG i pierwszej klatki;
-- utrzymanie zgodności z automatyzacjami Home Assistant i Browser Mod.
-
-## Stan lokalnej instalacji (do zweryfikowania z archiwum)
-
-W trakcie testów na Home Assistant działał podgląd `camera.ezviz_dp2_bk3392221_na_zywo` w trybie `camera_view: live` z wyjściem MJPEG. Lokalnie testowano zmiany w `mjpeg.py` oraz `const.py`. Te zmiany **nie są jeszcze częścią repozytorium**.
+Nie zaimportowano lokalnych historycznych plików `live_camera.py.before_*` ani pełnej konfiguracji HA.
 
 ## Zasady bezpieczeństwa
 
-- Nie publikuj `/config/.storage`, `secrets.yaml`, tokenów EZVIZ, plików diagnostycznych ani pełnych logów z podpisanymi adresami URL.
-- Repozytorium jest **publiczne**. Przed dodaniem archiwum z Home Assistanta należy sprawdzić zawartość i usunąć dane uwierzytelniające.
-- Przed instalacją nowego kodu wykonaj pełną kopię zapasową Home Assistanta.
-- Nie instaluj równolegle dwóch integracji o domenie `ezviz_hp7`.
+- Repozytorium jest publiczne. Nigdy nie dodawaj `/config/.storage`, `secrets.yaml`, tokenów EZVIZ, zrzutów diagnostycznych, logów lub archiwum całego HA.
+- Wgrany kod przeszukano pod kątem jawnych danych prywatnych; wykryte konstrukcje `password`/`token` są częścią implementacji klienta EZVIZ, nie kopiami konfiguracji użytkownika.
+- Zachowaj osobno **pełną kopię działającego Home Assistanta**, zanim zaczniesz testować kod z tego repozytorium.
+- **Nie instaluj dwóch integracji o domenie `ezviz_hp7` równocześnie.** Przed testem należy zaplanować bezpieczną zamianę i możliwość wycofania zmian.
 
-## Plan wdrożenia
+## Cele dalszego rozwoju
 
-Zobacz [docs/PLAN.md](docs/PLAN.md).
+1. Oddzielne i konfigurowalne ustawienia odpytywania i FFmpeg.
+2. Pobieranie wielu ostatnich alarmów z deduplikacją, żeby alarm PIR nie zagłuszył dzwonka.
+3. Lepsze pomiary czasu: alarm → HA → żądanie MJPEG → pierwsza klatka.
+4. Testy regresji, wydania i instrukcja aktualizacji przez HACS.
 
-## Autorzy i źródła
+[Plan projektu](docs/PLAN.md).
 
-Projekt pochodny względem [EZVIZ HP7](https://github.com/Bobsilvio/ezviz_hp7), © 2026 Silvio Vaira (Bobsilvio), MIT. Zachowujemy licencję i oznaczenia autorstwa kodu źródłowego oraz sprawdzimy licencje zależności przed publikacją kompletnego pakietu.
+## Informacje o autorstwie
 
-Ten projekt nie jest oficjalnym produktem firmy EZVIZ ani Home Assistant.
+Projekt pochodny względem [EZVIZ HP7](https://github.com/Bobsilvio/ezviz_hp7) autorstwa Silvio Vaira (Bobsilvio), MIT. Zachowano [LICENSE](LICENSE), [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) i informacje o autorstwie w kodzie. Projekt nie jest oficjalnym produktem EZVIZ ani Home Assistant.
