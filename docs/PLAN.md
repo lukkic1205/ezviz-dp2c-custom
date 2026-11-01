@@ -1,33 +1,30 @@
 # Plan — EZVIZ DP2C Custom
 
-## Etap 0 — zabezpieczenie stanu działającego
+## Etap 0 — zachowanie działającego kodu
 
-- [ ] Zachować pełną kopię Home Assistanta.
-- [ ] Wyeksportować **wyłącznie** katalog `/config/custom_components/ezviz_hp7` z bieżącej instalacji.
-- [ ] Przejrzeć eksport pod kątem tokenów, haseł, logów, zrzutów diagnostycznych i danych konta.
-- [ ] Porównać zawartość z [upstream](https://github.com/Bobsilvio/ezviz_hp7) 0.18.1; odnotować rzeczywiste zmiany lokalne.
-- [ ] Sprawdzić licencje plików i zależności.
+- [x] Odebrano archiwum integracji z Home Assistant.
+- [x] Porównano 50 właściwych plików z upstream i oddzielono 6 lokalnie zmodyfikowanych plików.
+- [x] Zaimportowano wszystkie 50 plików ze zgodnością SHA Git blob.
+- [x] Wyłączono z repozytorium historyczne kopie `live_camera.py.before_*`.
+- [x] Zachowano licencję upstream oraz licencje komponentów zewnętrznych.
+- [x] Przeprowadzono statyczną kontrolę składni plików Pythona oraz poprawności JSON.
+- [ ] Potwierdzić istnienie *pełnego* backupu Home Assistant poza HA.
+- [ ] Przejrzeć ewentualne dodatkowe sekrety w nowych plikach przed przyszłymi commitami.
 
-## Etap 1 — pierwsza wersja z zachowaniem działającej funkcjonalności
+## Etap 1 — niezależny test własnej integracji
 
-- [ ] Dodać zweryfikowane pliki źródłowe do `custom_components/ezviz_hp7/`.
-- [ ] Zachować wewnętrzną domenę `ezviz_hp7`, aby uniknąć zmiany identyfikatorów encji.
-- [ ] Wydzielić konfigurowalne ustawienia MJPEG i interwału odpytywania.
-- [ ] Wykonać kontrolę składni kodu oraz test uruchomienia na kopii HA.
-- [ ] Przygotować dokumentację instalacji i wycofania zmian.
+- [ ] Zachować dotychczasową domenę `ezviz_hp7` i istniejące identyfikatory encji.
+- [ ] Zweryfikować ładowanie integracji w kontrolowanej instalacji HA.
+- [ ] Przetestować przycisk dzwonka, alarm PIR, dostępność kamery oraz automatyzację Browser Mod.
+- [ ] Sprawdzić czas do pierwszej klatki i stabilność dwuminutowego podglądu.
+- [ ] Przygotować instrukcję przywracania i aktualizowania przez HACS.
+- [ ] Dopiero wtedy przygotować niezależny numer wydania.
 
-## Etap 2 — poprawa wykrywania zdarzeń
+## Etap 2 — rozwój
 
-- [ ] Sprawdzić pobieranie ostatnich alarmów i sytuację `doorbell ringing` + `PIR Alarm`.
-- [ ] Zaprojektować pobieranie kilku alarmów z deduplikacją i ograniczeniem obciążenia API.
-- [ ] Dodać pomiary opóźnienia wykrycia dzwonka oraz metryki stabilności połączenia.
+- [ ] Konfigurowalny, bezpieczny interwał pollingu i kontrola limitów API.
+- [ ] Pobieranie kilku ostatnich alarmów z deduplikacją.
+- [ ] Diagnostyka latencji dzwonka i obrazu oraz ograniczanie zbędnych logów.
+- [ ] Ocena wpływu równoległych klientów MJPEG na czas inicjalizacji.
 
-## Etap 3 — optymalizacja obrazu
-
-- [ ] Zmierzyć `MJPEG session START` → `FIRST FRAME` na pojedynczym kliencie.
-- [ ] Utrzymać odtwarzanie H.264 w trybie MJPEG, bez regresji.
-- [ ] Sprawdzić dodatkowe równoległe połączenia klientów i ich wpływ na opóźnienie.
-
-## Kryteria gotowości
-
-Nowa wersja nie może zastąpić działającej instalacji, dopóki nie ma weryfikowalnej kopii przywracania oraz udanych testów dzwonka, odtwarzania i automatycznego zamknięcia popupu.
+**Zasada:** nie nadpisujemy działającej instalacji przed zakończeniem testów i zapewnieniem łatwego rollbacku.
